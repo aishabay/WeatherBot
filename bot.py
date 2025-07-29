@@ -73,7 +73,7 @@ async def periodic_task():
             )
         except Exception as e:
             print(f"Failed to send scheduled message: {e}")
-        await asyncio.sleep(600)
+        await asyncio.sleep(300)
 
 
 async def on_startup():
