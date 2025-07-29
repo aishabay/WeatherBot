@@ -7,6 +7,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.filters import Command
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import StatesGroup, State
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 
 from config import BOT_TOKEN
 from keyboards import main_kb, inline_kb
@@ -64,8 +65,24 @@ async def get_result(callback: CallbackQuery):
     await callback.answer()
 
 
+async def periodic_task():
+    while True:
+        try:
+            await bot.send_message(
+                chat_id=472243553,
+                text="⏰ Reminder: This is your scheduled message!"
+            )
+        except Exception as e:
+            print(f"Failed to send scheduled message: {e}")
+        await asyncio.sleep(600)
+
+
+async def on_startup():
+    asyncio.create_task(periodic_task())
+
+
 async def main():
-    print("Бот запущен")
+    dp.startup.register(on_startup)
     await dp.start_polling(bot)
 
 
